@@ -16,6 +16,9 @@ namespace BeatTogether.Providers
 
         public MasterServerAvailabilityData GetServerStatus(string serverName)
         {
+            if (serverName == null)
+                return null;
+
             if (_serverStatus.TryGetValue(serverName, out var status))
                 return status;
             return null;
