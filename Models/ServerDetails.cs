@@ -18,7 +18,7 @@ namespace BeatTogether.Models
         {
         }
 
-        internal ServerDetails(IServerConfig config)
+        internal ServerDetails(ServerConfig config)
         {
             ServerName = config.ServerName;
             HostName = config.HostName;

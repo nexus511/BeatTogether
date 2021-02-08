@@ -2,7 +2,7 @@
 
 namespace BeatTogether.Models
 {
-    internal class ServerConfig : IServerConfig
+    internal class ServerConfig
     {
         public readonly static int DEFAULT_PORT = 2328;
 
