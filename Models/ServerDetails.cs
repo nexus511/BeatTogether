@@ -1,6 +1,6 @@
 ﻿namespace BeatTogether.Models
 {
-    internal class ServerDetails
+    public class ServerDetails
     {
         public readonly static int DEFAULT_PORT = 2328;
         public readonly static string OFFICIAL_SERVER_NAME = "Official Servers";

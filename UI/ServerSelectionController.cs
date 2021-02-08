@@ -22,7 +22,7 @@ namespace BeatTogether.UI
             _multiplayerView = multiplayerView;
             var changed = new BSMLAction(this, typeof(ServerSelectionController).GetMethod("OnServerChanged"));
             listSetting.onChange = changed;
-            UpdateUI(multiplayerView, Plugin.ServerDetailProvider.Selection);
+            UpdateUI(multiplayerView, Plugin.ServerDetailProvider.SelectedServer);
             GameEventDispatcher.Instance.MultiplayerViewEntered += OnMultiplayerViewEntered;
         }
 
@@ -33,7 +33,7 @@ namespace BeatTogether.UI
         {
             ServerDetails details = selection as ServerDetails;
             Plugin.Configuration.SelectedServer = details.ServerName;
-            Plugin.ServerDetailProvider.Selection = details;
+            Plugin.ServerDetailProvider.SelectedServer = details;
 
             // Keep this code, as it informs MPEX of the change
             // (by invoking the getters):
@@ -106,7 +106,7 @@ namespace BeatTogether.UI
 
         private void OnMultiplayerViewEntered(object sender, MultiplayerModeSelectionViewController multiplayerView)
         {
-            var selection = Plugin.ServerDetailProvider.Selection;
+            var selection = Plugin.ServerDetailProvider.SelectedServer;
             UpdateUI(multiplayerView, selection);
         }
 

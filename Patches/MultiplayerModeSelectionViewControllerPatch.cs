@@ -25,7 +25,7 @@ namespace BeatTogether.Patches
             var serverSelection = UIFactory.CreateServerSelectionView(__instance);
 
             serverSelection.values = servers.ToList<object>();
-            serverSelection.Value = Plugin.ServerDetailProvider.Selection;
+            serverSelection.Value = Plugin.ServerDetailProvider.SelectedServer;
         }
     }
 }
