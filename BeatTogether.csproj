@@ -133,8 +133,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Interfaces\IServerConfig.cs" />
+    <Compile Include="Configuration\ServerConfig.cs" />
+    <Compile Include="Models\Interfaces\IExtendedDetails.cs" />
+    <Compile Include="Models\Interfaces\IServerDetails.cs" />
+    <Compile Include="Models\OfficialServerDetails.cs" />
     <Compile Include="Models\ServerDetails.cs" />
     <Compile Include="Patches\MessageHandlerPatch.cs" />
+    <Compile Include="Providers\BeatTogetherCore.cs" />
     <Compile Include="Providers\GameClassInstanceProvider.cs" />
     <Compile Include="Providers\ServerDetailProvider.cs" />
     <Compile Include="Providers\ServerStatusFetcher.cs" />

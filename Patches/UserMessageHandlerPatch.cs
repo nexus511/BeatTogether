@@ -15,7 +15,8 @@ namespace BeatTogether.Patches
             MasterServerEndPoint endPoint,
             IAuthenticationTokenProvider authenticationTokenProvider)
         {
-            GameClassInstanceProvider.Instance.UserMessageHandler = __instance;
+            var provider = BeatTogetherCore.instance.InstanceProvider;
+            provider.UserMessageHandler = __instance;
         }
     }
 }

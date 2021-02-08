@@ -10,7 +10,9 @@ namespace BeatTogether.Patches
     {
         internal static void Postfix(ref Task<MasterServerAvailabilityData> __result)
         {
-            var serverStatusFetcher = new ServerStatusFetcher(Plugin.ServerDetailProvider.Servers, Plugin.StatusProvider);
+            var detailsProvider = BeatTogetherCore.instance.ServerDetailProvider;
+            var statusProvider = BeatTogetherCore.instance.StatusProvider;
+            var serverStatusFetcher = new ServerStatusFetcher(detailsProvider?.Servers, statusProvider);
             _ = serverStatusFetcher.FetchAll();
             __result = Task.FromResult(new MasterServerAvailabilityData()
             {

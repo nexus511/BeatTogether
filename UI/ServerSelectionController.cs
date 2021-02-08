@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
 using BeatTogether.Models;
+using BeatTogether.Models.Interfaces;
 using BeatTogether.Providers;
 using IPA.Utilities;
 using MasterServer;
@@ -12,6 +13,11 @@ namespace BeatTogether.UI
 {
     internal class ServerSelectionController : MonoBehaviour
     {
+        private static readonly string STATUS_TEXT_UNKNOWN = "Status: <color=\"yellow\">UNKNOWN";
+        private static readonly string STATUS_TEXT_OFFLINE = "Status: <color=\"red\">OFFLINE";
+        private static readonly string STATUS_TEXT_ONLINE = "Status: <color=\"green\">ONLINE";
+        private static readonly string STATUS_TEXT_MAINTENANCE = "Status: <color=\"yellow\">MAINTENANCE UPCOMING";
+
         private static MethodInfo _unauthenticateWithMasterServerMethodInfo = typeof(UserMessageHandler)
             .GetMethod("UnauthenticateWithMasterServer", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -22,7 +28,7 @@ namespace BeatTogether.UI
             _multiplayerView = multiplayerView;
             var changed = new BSMLAction(this, typeof(ServerSelectionController).GetMethod("OnServerChanged"));
             listSetting.onChange = changed;
-            UpdateUI(multiplayerView, Plugin.ServerDetailProvider.SelectedServer);
+            UpdateUI(multiplayerView, BeatTogetherCore.instance.SelectedServer);
             GameEventDispatcher.Instance.MultiplayerViewEntered += OnMultiplayerViewEntered;
         }
 
@@ -32,8 +38,8 @@ namespace BeatTogether.UI
         public void OnServerChanged(object selection)
         {
             ServerDetails details = selection as ServerDetails;
-            Plugin.Configuration.SelectedServer = details.ServerName;
-            Plugin.ServerDetailProvider.SelectedServer = details;
+            var detailsProvider = BeatTogetherCore.instance.ServerDetailProvider;
+            detailsProvider?.SetSelectedServer(details);
 
             // Keep this code, as it informs MPEX of the change
             // (by invoking the getters):
@@ -53,19 +59,21 @@ namespace BeatTogether.UI
 
         private void DisconnectServer()
         {
-            var handler = GameClassInstanceProvider.Instance.UserMessageHandler;
+            var provider = BeatTogetherCore.instance.InstanceProvider;
+            var handler = provider?.UserMessageHandler;
             if (handler == null)
                 return;
             _unauthenticateWithMasterServerMethodInfo.Invoke(handler, new object[] { });
         }
 
-        private void UpdateUI(MultiplayerModeSelectionViewController multiplayerView, ServerDetails details)
+        private void UpdateUI(MultiplayerModeSelectionViewController multiplayerView, IServerDetails details)
         {
             var transform = _multiplayerView.transform;
             var quickPlayButton = transform.Find("Buttons/QuickPlayButton").gameObject;
             quickPlayButton.SetActive(details.IsOfficial);
 
-            var status = Plugin.StatusProvider.GetServerStatus(details.ServerName);
+            var statusProvider = BeatTogetherCore.instance.StatusProvider;
+            var status = statusProvider?.GetServerStatus(details);
             multiplayerView.SetData(status);
 
             var textMesh = GetMaintenanceMessageText();
@@ -78,7 +86,7 @@ namespace BeatTogether.UI
             textMesh.richText = true;
             if (status == null)
             {
-                textMesh.SetText("Status: <color=\"yellow\">UNKNOWN");
+                textMesh.SetText(STATUS_TEXT_UNKNOWN);
                 textMesh.gameObject.SetActive(true);
                 return;
             }
@@ -86,13 +94,14 @@ namespace BeatTogether.UI
             switch (status.status)
             {
                 case MasterServerAvailabilityData.AvailabilityStatus.Offline:
-                    textMesh.SetText("Status: <color=\"red\">OFFLINE");
+                    textMesh.SetText(STATUS_TEXT_OFFLINE);
                     break;
                 case MasterServerAvailabilityData.AvailabilityStatus.MaintenanceUpcoming:
-                    textMesh.SetText("Status: <color=\"yellow\">MAINTENANCE UPCOMING");
+                    // should not be reached, as method returns, if basegame already handled the message
+                    textMesh.SetText(STATUS_TEXT_MAINTENANCE);
                     break;
                 case MasterServerAvailabilityData.AvailabilityStatus.Online:
-                    textMesh.SetText("Status: <color=\"green\">ONLINE");
+                    textMesh.SetText(STATUS_TEXT_ONLINE);
                     break;
             }
             textMesh.gameObject.SetActive(true);
@@ -106,7 +115,7 @@ namespace BeatTogether.UI
 
         private void OnMultiplayerViewEntered(object sender, MultiplayerModeSelectionViewController multiplayerView)
         {
-            var selection = Plugin.ServerDetailProvider.SelectedServer;
+            var selection = BeatTogetherCore.instance.SelectedServer;
             UpdateUI(multiplayerView, selection);
         }
 

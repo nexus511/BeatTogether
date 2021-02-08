@@ -1,38 +1,50 @@
-﻿namespace BeatTogether.Models
+﻿using BeatTogether.Configuration.Interfaces;
+using BeatTogether.Models.Interfaces;
+
+namespace BeatTogether.Models
 {
-    public class ServerDetails
+    /// <summary>
+    /// Object describing a server.
+    /// </summary>
+    public class ServerDetails : IServerDetails
     {
+
+        /// <summary>
+        /// Default port used by the multiplayer master server.
+        /// </summary>
         public readonly static int DEFAULT_PORT = 2328;
-        public readonly static string OFFICIAL_SERVER_NAME = "Official Servers";
 
-        public static string OfficialStatusUri { set; get; }
+        public ServerDetails()
+        {
+        }
 
-        private MasterServerEndPoint _endPoint;
-
-        public string ServerName { get; set; }
-        public string HostName { get; set; }
-        public int Port { get; set; } = DEFAULT_PORT;
-        public string StatusUri { get; set; }
-        public bool IsOfficial { get => ServerName == OFFICIAL_SERVER_NAME; }
+        internal ServerDetails(IServerConfig config)
+        {
+            ServerName = config.ServerName;
+            HostName = config.HostName;
+            Port = config.Port;
+            StatusUri = config.StatusUri;
+        }
 
         public override string ToString() => ServerName;
 
+        #region IServerDetails
+        public bool IsOfficial => false;
+
+        public string Identifier => ServerName;
+
+        public string ServerName { get; set; }
+
+        public string HostName { get; set; }
+
+        public int Port { get; set; }
+
+        public string StatusUri { get; set; }
+
         public MasterServerEndPoint GetEndPoint()
-        {
-            if (ServerName == OFFICIAL_SERVER_NAME)
-                return null;
-            if (_endPoint == null)
-                _endPoint = new MasterServerEndPoint(HostName, Port);
-            return _endPoint;
-        }
+            => new MasterServerEndPoint(HostName, Port);
 
-        public bool Is(string serverName) => ServerName == serverName;
-
-        internal static ServerDetails CreateOfficialInstance() =>
-            new ServerDetails
-            {
-                ServerName = OFFICIAL_SERVER_NAME,
-                StatusUri = OfficialStatusUri
-            };
+        public bool Is(string serverId) => serverId.Equals(Identifier);
+        #endregion
     }
 }

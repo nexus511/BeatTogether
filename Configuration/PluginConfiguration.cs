@@ -14,10 +14,10 @@ namespace BeatTogether.Configuration
 
         public virtual string SelectedServer { get; set; } = "BeatTogether";
 
-        [NonNullable, UseConverter(typeof(CollectionConverter<ServerDetails, List<ServerDetails>>))]
-        public virtual List<ServerDetails> Servers { get; set; } = new List<ServerDetails>()
+        [NonNullable, UseConverter(typeof(CollectionConverter<ServerConfig, List<ServerConfig>>))]
+        public virtual List<ServerConfig> Servers { get; set; } = new List<ServerConfig>()
         {
-            new ServerDetails()
+            new ServerConfig()
             {
                 ServerName = "BeatTogether",
                 HostName = "btogether.xn--9o8hpe.ws",

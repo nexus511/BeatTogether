@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BeatTogether.Models;
+using BeatTogether.Models.Interfaces;
 using UnityEngine;
 
 namespace BeatTogether.Providers
 {
     internal class ServerStatusFetcher
     {
-        private readonly List<ServerDetails> _serverDetails;
+        private readonly List<IServerDetails> _serverDetails;
         private readonly ServerStatusProvider _provider;
 
-        public ServerStatusFetcher(List<ServerDetails> servers, ServerStatusProvider provider)
+        public ServerStatusFetcher(List<IServerDetails> servers, ServerStatusProvider provider)
         {
             _serverDetails = servers;
             _provider = provider;
@@ -33,7 +33,7 @@ namespace BeatTogether.Providers
 
         #region Private Methods
 
-        private async Task<KeyValuePair<string, MasterServerAvailabilityData>> FetchSingle(ServerDetails server)
+        private async Task<KeyValuePair<string, MasterServerAvailabilityData>> FetchSingle(IServerDetails server)
         {
             var url = server.StatusUri;
             Plugin.Logger.Debug($"Fetching status for '{server.ServerName}' from '{url}'.");

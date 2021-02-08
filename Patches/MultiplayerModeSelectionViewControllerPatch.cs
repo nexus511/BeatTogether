@@ -14,18 +14,20 @@ namespace BeatTogether.Patches
 
             if (firstActivation)
             {
-                GameClassInstanceProvider.Instance.MultiplayerModeSelectionViewController = __instance;
+                var provider = BeatTogetherCore.instance.InstanceProvider;
+                provider.MultiplayerModeSelectionViewController = __instance;
                 AddServerSelection(__instance);
             }
         }
 
         private static void AddServerSelection(MultiplayerModeSelectionViewController __instance)
         {
-            var servers = Plugin.ServerDetailProvider.Servers;
+            var servers = BeatTogetherCore.instance.Servers;
             var serverSelection = UIFactory.CreateServerSelectionView(__instance);
 
+            var detailsProvider = BeatTogetherCore.instance;
             serverSelection.values = servers.ToList<object>();
-            serverSelection.Value = Plugin.ServerDetailProvider.SelectedServer;
+            serverSelection.Value = detailsProvider?.SelectedServer;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BeatTogether.Providers;
 using HarmonyLib;
 using MasterServer;
+using BeatTogether.Providers;
 
 namespace BeatTogether.Patches
 {
@@ -9,10 +10,11 @@ namespace BeatTogether.Patches
     {
         internal static void Prefix(MessageHandler __instance)
         {
-            if (GameClassInstanceProvider.Instance.UserMessageHandler != __instance)
+            var provider = BeatTogetherCore.instance.InstanceProvider;
+            if (provider.UserMessageHandler != __instance)
                 return;
 
-            GameClassInstanceProvider.Instance.UserMessageHandler = null;
+            provider.UserMessageHandler = null;
         }
     }
 }

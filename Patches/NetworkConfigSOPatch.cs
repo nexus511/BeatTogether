@@ -1,5 +1,6 @@
-﻿using BeatTogether.Models;
-using HarmonyLib;
+﻿using HarmonyLib;
+using BeatTogether.Models;
+using BeatTogether.Providers;
 
 namespace BeatTogether.Patches
 {
@@ -9,9 +10,9 @@ namespace BeatTogether.Patches
         [HarmonyBefore("mod.serverbrowser")]
         internal static void Postfix(ref string __result)
         {
-            ServerDetails.OfficialStatusUri = __result;
+            OfficialServerDetails.OfficialStatusUri = __result;
 
-            var server = Plugin.ServerDetailProvider.SelectedServer;
+            var server = BeatTogetherCore.instance.SelectedServer;
             if (server.IsOfficial)
                 return;
 
@@ -26,7 +27,7 @@ namespace BeatTogether.Patches
         [HarmonyBefore("mod.serverbrowser")]
         internal static void Postfix(ref MasterServerEndPoint __result)
         {
-            var server = Plugin.ServerDetailProvider.SelectedServer;
+            var server = BeatTogetherCore.instance.SelectedServer;
             if (server.IsOfficial)
                 return;
 

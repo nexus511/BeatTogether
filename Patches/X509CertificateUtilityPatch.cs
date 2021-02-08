@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using BeatTogether.Providers;
 
 namespace BeatTogether.Patches
 {
@@ -7,7 +8,8 @@ namespace BeatTogether.Patches
     {
         internal static bool Prefix()
         {
-            var server = Plugin.ServerDetailProvider.SelectedServer;
+
+            var server = BeatTogetherCore.instance.SelectedServer;
             if (server.IsOfficial)
                 return true;
 

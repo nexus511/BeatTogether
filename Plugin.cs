@@ -6,6 +6,7 @@ using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
 using IPALogger = IPA.Logging.Logger;
+using UnityEngine;
 
 namespace BeatTogether
 {
@@ -15,10 +16,9 @@ namespace BeatTogether
     {
         private const string _harmonyId = "com.Python.BeatTogether";
         internal static Harmony Harmony { get; private set; }
-        internal static PluginConfiguration Configuration { get; private set; }
+        private static PluginConfiguration Configuration { get; set; }
         internal static IPALogger Logger { get; private set; }
-        internal static ServerDetailProvider ServerDetailProvider { get => ServerDetailProvider.Instance; }
-        internal static ServerStatusProvider StatusProvider { get; private set; }
+        private BeatTogetherCore Factory { get; set; }
 
         [OnStart]
         public void OnApplicationStart()
@@ -31,9 +31,12 @@ namespace BeatTogether
             Config config)
         {
             Harmony = new Harmony(_harmonyId);
+
             Configuration = config.Generated<PluginConfiguration>();
             Logger = logger;
-            StatusProvider = new ServerStatusProvider();
+
+            Factory = new GameObject("BeatTogetherModelFactory").AddComponent<BeatTogetherCore>();
+            Factory.Init(Configuration);
         }
 
         [OnEnable]

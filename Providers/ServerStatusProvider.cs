@@ -1,24 +1,45 @@
 ﻿using System.Collections.Generic;
+using BeatTogether.Models.Interfaces;
 
 namespace BeatTogether.Providers
 {
-    internal class ServerStatusProvider
+    /// <summary>
+    /// Provides information on the server status. This information is fetched
+    /// from the status endpoints.
+    /// 
+    /// The status information is only available for servers, where the request
+    /// has been successful.
+    /// </summary>
+    public class ServerStatusProvider
     {
         private readonly Dictionary<string, MasterServerAvailabilityData> _serverStatus;
 
-        public ServerStatusProvider()
+        /// <summary>
+        /// Returns the server status information for a single server.
+        /// 
+        /// The value can be requested using the IServerDetails object. If no
+        /// status is available for the given server, this method will return
+        /// null.
+        /// </summary>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        public MasterServerAvailabilityData GetServerStatus(IServerDetails server)
+        {
+            if (_serverStatus.TryGetValue(server.Identifier, out var status))
+                return status;
+            return null;
+        }
+
+        #region internal
+        internal ServerStatusProvider()
         {
             _serverStatus = new Dictionary<string, MasterServerAvailabilityData>();
         }
 
-        public void SetServerStatus(string serverName, MasterServerAvailabilityData status) =>
-            _serverStatus[serverName] = status;
-
-        public MasterServerAvailabilityData GetServerStatus(string serverName)
-        {
-            if (_serverStatus.TryGetValue(serverName, out var status))
-                return status;
-            return null;
-        }
+        internal void SetServerStatus(string identifier, MasterServerAvailabilityData status) =>
+            _serverStatus[identifier] = status;
+        internal void SetServerStatus(IServerDetails server, MasterServerAvailabilityData status) =>
+            SetServerStatus(server.Identifier, status);
+        #endregion
     }
 }
