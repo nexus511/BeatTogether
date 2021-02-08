@@ -10,7 +10,7 @@ namespace BeatTogether.Providers
     {
         /// <summary>
         /// Instance of the UserMessageHandler.
-        /// 
+        ///
         /// This is the class handling the network traffic between the game and
         /// the master server.
         /// </summary>

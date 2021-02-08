@@ -1,5 +1,4 @@
-﻿using BeatTogether.Configuration.Interfaces;
-using BeatTogether.Models.Interfaces;
+﻿using BeatTogether.Models.Interfaces;
 
 namespace BeatTogether.Models
 {

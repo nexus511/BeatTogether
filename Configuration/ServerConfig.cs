@@ -1,6 +1,4 @@
-﻿using BeatTogether.Configuration.Interfaces;
-
-namespace BeatTogether.Models
+﻿namespace BeatTogether.Models
 {
     internal class ServerConfig
     {

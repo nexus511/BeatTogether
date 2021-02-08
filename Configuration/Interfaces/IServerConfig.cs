@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BeatTogether.Configuration.Interfaces
+﻿namespace BeatTogether.Configuration.Interfaces
 {
     /// <summary>
     /// Interface defining the minimal details avialable to have a server
