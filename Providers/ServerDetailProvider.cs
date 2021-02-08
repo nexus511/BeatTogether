@@ -18,6 +18,21 @@ namespace BeatTogether.Providers
         private readonly PluginConfiguration _config;
 
         /// <summary>
+        /// This event will be triggered after the selection of the active
+        /// server has been changed.
+        /// </summary>
+        public EventHandler<IServerDetails> ServerSelectionChanged;
+
+        /// <summary>
+        /// This event will be triggered when the list of available servers
+        /// has been updated.
+        ///
+        /// This is the case, when servers have been added or removed from
+        /// thge list using the appropriate methods.
+        /// </summary>
+        public EventHandler<List<IServerDetails>> ServerListChanged;
+
+        /// <summary>
         /// Contains the list of all configured servers that can be selected
         /// by the user.
         /// </summary>
@@ -30,7 +45,7 @@ namespace BeatTogether.Providers
 
         /// <summary>
         /// API call to change the selection for the current server.
-        /// 
+        ///
         /// This call will also update the UI selection, so use this to
         /// change the selection from an external source.
         /// </summary>
@@ -49,6 +64,8 @@ namespace BeatTogether.Providers
             SelectedServer = server;
             if (ConfiguredServerIds.Contains(server.Identifier))
                 _config.SelectedServer = server.Identifier;
+
+            ServerSelectionChanged?.Invoke(this, server);
         }
 
         internal ServerDetailProvider(PluginConfiguration config)
