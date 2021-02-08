@@ -37,7 +37,7 @@ namespace BeatTogether.UI
 
         public void OnServerChanged(object selection)
         {
-            ServerDetails details = selection as ServerDetails;
+            var details = selection as IServerDetails;
             var detailsProvider = BeatTogetherCore.instance.ServerDetailProvider;
             detailsProvider?.SetSelectedServer(details);
 

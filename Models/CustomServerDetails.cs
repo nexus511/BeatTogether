@@ -6,7 +6,7 @@ namespace BeatTogether.Models
     /// <summary>
     /// Object describing a server.
     /// </summary>
-    public class ServerDetails : IServerDetails
+    public class CustomServerDetails : IServerDetails
     {
 
         /// <summary>
@@ -14,11 +14,11 @@ namespace BeatTogether.Models
         /// </summary>
         public readonly static int DEFAULT_PORT = 2328;
 
-        public ServerDetails()
+        public CustomServerDetails()
         {
         }
 
-        internal ServerDetails(ServerConfig config)
+        internal CustomServerDetails(ServerConfig config)
         {
             ServerName = config.ServerName;
             HostName = config.HostName;

@@ -9,7 +9,7 @@ namespace BeatTogether.Models
     /// a dummy here, that we can mainly add to the list of servers to have
     /// it show up in the user settings.
     /// </summary>
-    public class OfficialServerDetails : IServerDetails
+    class OfficialServerDetails : IServerDetails
     {
         internal readonly static string OFFICIAL_SERVER_NAME = "Official Servers";
 
@@ -26,7 +26,7 @@ namespace BeatTogether.Models
 
         public string HostName => null;
 
-        public int Port => ServerDetails.DEFAULT_PORT;
+        public int Port => CustomServerDetails.DEFAULT_PORT;
 
         public string StatusUri { get => OfficialStatusUri; }
 
