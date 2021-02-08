@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
 using BeatTogether.Models.Interfaces;
@@ -22,14 +24,19 @@ namespace BeatTogether.UI
 
         private MultiplayerModeSelectionViewController _multiplayerView;
 
-        public void Init(ListSetting listSetting, MultiplayerModeSelectionViewController multiplayerView)
+        private ListSetting _serverSelection;
+
+        public void Init(ListSetting serverSelection, MultiplayerModeSelectionViewController multiplayerView)
         {
             _multiplayerView = multiplayerView;
+            _serverSelection = serverSelection;
+
             var changed = new BSMLAction(this, typeof(ServerSelectionController).GetMethod("OnServerChanged"));
-            listSetting.onChange = changed;
+            serverSelection.onChange = changed;
             UpdateUI(multiplayerView, BeatTogetherCore.instance.SelectedServer);
 
             var provider = BeatTogetherCore.instance.ServerDetailProvider;
+            provider.ServerListChanged += OnServerListChanged;
             provider.UpdateServerSelectionInt += OnServerSelectionInt;
             GameEventDispatcher.Instance.MultiplayerViewEntered += OnMultiplayerViewEntered;
         }
@@ -38,6 +45,7 @@ namespace BeatTogether.UI
         {
             var provider = BeatTogetherCore.instance.ServerDetailProvider;
             provider.UpdateServerSelectionInt -= OnServerSelectionInt;
+            provider.ServerListChanged -= OnServerListChanged;
             GameEventDispatcher.Instance.MultiplayerViewEntered -= OnMultiplayerViewEntered;
         }
 
@@ -133,6 +141,15 @@ namespace BeatTogether.UI
             UpdateUI(_multiplayerView, server);
         }
 
+        private void OnServerListChanged(object sender, List<IServerDetails> serverList)
+        {
+            if (_serverSelection == null)
+                return;
+
+            _serverSelection.values = serverList.ToList<object>();
+            var selection = BeatTogetherCore.instance.SelectedServer;
+            UpdateUI(_multiplayerView, selection);
+        }
         #endregion
     }
 }
