@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
-using BeatTogether.Models;
 using BeatTogether.Models.Interfaces;
 using BeatTogether.Providers;
 using IPA.Utilities;
@@ -29,17 +28,24 @@ namespace BeatTogether.UI
             var changed = new BSMLAction(this, typeof(ServerSelectionController).GetMethod("OnServerChanged"));
             listSetting.onChange = changed;
             UpdateUI(multiplayerView, BeatTogetherCore.instance.SelectedServer);
+
+            var provider = BeatTogetherCore.instance.ServerDetailProvider;
+            provider.UpdateServerSelectionInt += OnServerSelectionInt;
             GameEventDispatcher.Instance.MultiplayerViewEntered += OnMultiplayerViewEntered;
         }
 
         public void OnDestroy()
-            => GameEventDispatcher.Instance.MultiplayerViewEntered -= OnMultiplayerViewEntered;
+        {
+            var provider = BeatTogetherCore.instance.ServerDetailProvider;
+            provider.UpdateServerSelectionInt -= OnServerSelectionInt;
+            GameEventDispatcher.Instance.MultiplayerViewEntered -= OnMultiplayerViewEntered;
+        }
 
         public void OnServerChanged(object selection)
         {
             var details = selection as IServerDetails;
             var detailsProvider = BeatTogetherCore.instance.ServerDetailProvider;
-            detailsProvider?.SetSelectedServer(details);
+            detailsProvider?.OnSetSelectedServer(this, details);
 
             // Keep this code, as it informs MPEX of the change
             // (by invoking the getters):
@@ -68,6 +74,9 @@ namespace BeatTogether.UI
 
         private void UpdateUI(MultiplayerModeSelectionViewController multiplayerView, IServerDetails details)
         {
+            if (multiplayerView == null)
+                return;
+
             var transform = _multiplayerView.transform;
             var quickPlayButton = transform.Find("Buttons/QuickPlayButton").gameObject;
             quickPlayButton.SetActive(details.IsOfficial);
@@ -117,6 +126,11 @@ namespace BeatTogether.UI
         {
             var selection = BeatTogetherCore.instance.SelectedServer;
             UpdateUI(multiplayerView, selection);
+        }
+
+        private void OnServerSelectionInt(object sender, IServerDetails server)
+        {
+            UpdateUI(_multiplayerView, server);
         }
 
         #endregion

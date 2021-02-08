@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BeatTogether.Models;
 using BeatTogether.Models.Interfaces;
@@ -27,14 +28,29 @@ namespace BeatTogether.Providers
         /// </summary>
         public IServerDetails SelectedServer { get; private set; }
 
+        /// <summary>
+        /// API call to change the selection for the current server.
+        /// 
+        /// This call will also update the UI selection, so use this to
+        /// change the selection from an external source.
+        /// </summary>
+        /// <param name="server"></param>
         public void SetSelectedServer(IServerDetails server)
+            => UpdateServerSelectionInt?.Invoke(this, server);
+
+        #region internal
+        internal EventHandler<IServerDetails> UpdateServerSelectionInt;
+
+        internal void OnSetSelectedServer(object sender, IServerDetails server)
         {
+            if (SelectedServer == server)
+                return;
+
             SelectedServer = server;
             if (ConfiguredServerIds.Contains(server.Identifier))
                 _config.SelectedServer = server.Identifier;
         }
 
-        #region internal
         internal ServerDetailProvider(PluginConfiguration config)
         {
             _config = config;
@@ -50,6 +66,8 @@ namespace BeatTogether.Providers
             SelectedServer = Servers.FirstOrDefault(server => server.Is(config.SelectedServer));
             if (SelectedServer == null)
                 SelectedServer = Servers.First();
+
+            UpdateServerSelectionInt += OnSetSelectedServer;
         }
         #endregion
     }
