@@ -1,4 +1,5 @@
-﻿using BeatTogether.Models.Interfaces;
+﻿using BeatTogether.Configuration;
+using BeatTogether.Models.Interfaces;
 
 namespace BeatTogether.Models
 {
@@ -23,6 +24,7 @@ namespace BeatTogether.Models
             HostName = config.HostName;
             Port = config.Port;
             StatusUri = config.StatusUri;
+            ServerFeatures = config.ServerFeatures;
         }
 
         public override string ToString() => ServerName;
@@ -39,6 +41,8 @@ namespace BeatTogether.Models
         public int Port { get; set; }
 
         public string StatusUri { get; set; }
+
+        public ConfigFlags.ServerFeatures ServerFeatures { get; set; }
 
         public MasterServerEndPoint GetEndPoint()
             => new MasterServerEndPoint(HostName, Port);

@@ -35,7 +35,7 @@ namespace BeatTogether.UI
             serverSelection.onChange = changed;
             UpdateUI(multiplayerView, BeatTogetherCore.instance.SelectedServer);
 
-            var provider = BeatTogetherCore.instance.ServerDetailProvider;
+            var provider = BeatTogetherCore.instance.ServerDetailProvider as ServerDetailProvider;
             provider.ServerListChanged += OnServerListChanged;
             provider.UpdateServerSelectionInt += OnServerSelectionInt;
             GameEventDispatcher.Instance.MultiplayerViewEntered += OnMultiplayerViewEntered;
@@ -43,7 +43,7 @@ namespace BeatTogether.UI
 
         public void OnDestroy()
         {
-            var provider = BeatTogetherCore.instance.ServerDetailProvider;
+            var provider = BeatTogetherCore.instance.ServerDetailProvider as ServerDetailProvider;
             provider.UpdateServerSelectionInt -= OnServerSelectionInt;
             provider.ServerListChanged -= OnServerListChanged;
             GameEventDispatcher.Instance.MultiplayerViewEntered -= OnMultiplayerViewEntered;
@@ -52,11 +52,21 @@ namespace BeatTogether.UI
         public void OnServerChanged(object selection)
         {
             var details = selection as IServerDetails;
-            var detailsProvider = BeatTogetherCore.instance.ServerDetailProvider;
+            var detailsProvider = BeatTogetherCore.instance.ServerDetailProvider as ServerDetailProvider;
             detailsProvider?.OnSetSelectedServer(this, details);
 
             // Keep this code, as it informs MPEX of the change
             // (by invoking the getters):
+            NotifyMpex();
+
+            DisconnectServer();
+            UpdateUI(_multiplayerView, details);
+        }
+
+        #region Private Methods
+
+        private void NotifyMpex()
+        {
             var networkConfig = GetNetworkConfig();
             var endPoint = networkConfig.masterServerEndPoint;
             var statusUrl = networkConfig.masterServerStatusUrl;
@@ -64,12 +74,7 @@ namespace BeatTogether.UI
                 "Master server selection changed " +
                 $"(EndPoint={endPoint}, StatusUrl={statusUrl})"
             );
-
-            DisconnectServer();
-            UpdateUI(_multiplayerView, details);
         }
-
-        #region Private Methods
 
         private void DisconnectServer()
         {

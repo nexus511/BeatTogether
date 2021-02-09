@@ -21,7 +21,8 @@ namespace BeatTogether.Configuration
             {
                 ServerName = "BeatTogether",
                 HostName = "btogether.xn--9o8hpe.ws",
-                StatusUri = "http://btogether.xn--9o8hpe.ws/status"
+                StatusUri = "http://btogether.xn--9o8hpe.ws/status",
+                ServerFeatures = ConfigFlags.ServerFeatures.CreateGame | ConfigFlags.ServerFeatures.JoinGame
             }
         };
 

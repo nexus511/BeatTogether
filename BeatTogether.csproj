@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\Interfaces\IServerConfig.cs" />
+    <Compile Include="Models\ConfigFlags.cs" />
     <Compile Include="Configuration\ServerConfig.cs" />
     <Compile Include="Models\Interfaces\IExtendedDetails.cs" />
     <Compile Include="Models\Interfaces\IServerDetails.cs" />
@@ -142,6 +143,8 @@
     <Compile Include="Patches\MessageHandlerPatch.cs" />
     <Compile Include="Providers\BeatTogetherCore.cs" />
     <Compile Include="Providers\GameClassInstanceProvider.cs" />
+    <Compile Include="Providers\Interfaces\IServerDetailProvider.cs" />
+    <Compile Include="Providers\Interfaces\IServerStatusProvider.cs" />
     <Compile Include="Providers\ServerDetailProvider.cs" />
     <Compile Include="Providers\ServerStatusFetcher.cs" />
     <Compile Include="Providers\ServerStatusProvider.cs" />

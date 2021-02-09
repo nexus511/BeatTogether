@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BeatTogether.Models.Interfaces;
+using BeatTogether.Providers.Interfaces;
 using UnityEngine;
 
 namespace BeatTogether.Providers
@@ -13,10 +14,10 @@ namespace BeatTogether.Providers
         private readonly List<IServerDetails> _serverDetails;
         private readonly ServerStatusProvider _provider;
 
-        public ServerStatusFetcher(List<IServerDetails> servers, ServerStatusProvider provider)
+        public ServerStatusFetcher(List<IServerDetails> servers, IServerStatusProvider provider)
         {
             _serverDetails = servers;
-            _provider = provider;
+            _provider = provider as ServerStatusProvider;
         }
 
         public async Task FetchAll()

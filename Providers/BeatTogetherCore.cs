@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using BeatTogether.Configuration;
 using BeatTogether.Models.Interfaces;
+using BeatTogether.Providers.Interfaces;
 
 namespace BeatTogether.Providers
 {
     /// <summary>
     /// Factory creating and providing access to the core components of the
     /// BeatTogether mod.
-    /// 
+    ///
     /// This would be the entry point when acessing things like the server
     /// selection or hooking connection update events.
     /// </summary>
@@ -18,13 +19,13 @@ namespace BeatTogether.Providers
         /// possible server selections as well as adding new servers to
         /// the list.
         /// </summary>
-        public ServerDetailProvider ServerDetailProvider { get; private set; }
+        public IServerDetailProvider ServerDetailProvider { get; private set; }
 
         /// <summary>
         /// Use the status provider to access information on the online
         /// status of the different servers.
         /// </summary>
-        public ServerStatusProvider StatusProvider { get; private set; }
+        public IServerStatusProvider StatusProvider { get; private set; }
 
         /// <summary>
         /// Instance of the GameClassInstanceProvider to allow acessing
@@ -34,19 +35,19 @@ namespace BeatTogether.Providers
 
         /// <summary>
         /// Shortcut to ServerDetailsProvider.Selected.
-        /// 
+        ///
         /// Returns the server currently selected.
         /// </summary>
         public IServerDetails SelectedServer => ServerDetailProvider?.SelectedServer;
 
         /// <summary>
         /// Shortcut to ServerDetailsProvider.Servers.
-        /// 
+        ///
         /// Returns the list of available servers for selection.
         /// </summary>
         public List<IServerDetails> Servers => ServerDetailProvider?.Servers;
 
-        #region internal methods
+        #region Internal Methods
 
         internal void Init(PluginConfiguration configuration)
         {
@@ -58,7 +59,7 @@ namespace BeatTogether.Providers
 
         #endregion
 
-        #region private
+        #region Private Methods
 
         private BeatTogetherCore()
         {

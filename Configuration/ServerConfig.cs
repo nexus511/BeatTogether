@@ -1,4 +1,6 @@
-﻿namespace BeatTogether.Models
+﻿using BeatTogether.Models;
+
+namespace BeatTogether.Configuration
 {
     internal class ServerConfig
     {
@@ -11,5 +13,8 @@
         public int Port { get; set; } = DEFAULT_PORT;
 
         public string StatusUri { get; set; }
+
+        public ConfigFlags.ServerFeatures ServerFeatures { get; set; }
+            = ConfigFlags.ServerFeatures.JoinGame | ConfigFlags.ServerFeatures.CreateGame;
     }
 }

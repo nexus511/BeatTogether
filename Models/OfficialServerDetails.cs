@@ -30,6 +30,12 @@ namespace BeatTogether.Models
 
         public string StatusUri { get => OfficialStatusUri; }
 
+        public ConfigFlags.ServerFeatures ServerFeatures {
+            get => ConfigFlags.ServerFeatures.CreateGame |
+                ConfigFlags.ServerFeatures.JoinGame |
+                ConfigFlags.ServerFeatures.QuickPlay;
+        }
+
         public MasterServerEndPoint GetEndPoint() => null;
 
         public bool Is(string serverId) => serverId.Equals(Identifier);

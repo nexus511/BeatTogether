@@ -1,4 +1,6 @@
-﻿namespace BeatTogether.Configuration.Interfaces
+﻿using BeatTogether.Models;
+
+namespace BeatTogether.Configuration.Interfaces
 {
     /// <summary>
     /// Interface defining the minimal details avialable to have a server
@@ -27,5 +29,10 @@
         /// is available, this can be null instead.
         /// </summary>
         string StatusUri { get; }
+
+        /// <summary>
+        /// Features the server has enabled.
+        /// </summary>
+        ConfigFlags.ServerFeatures ServerFeatures { get; }
     }
 }
