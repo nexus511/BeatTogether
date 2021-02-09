@@ -1,7 +1,6 @@
 ﻿using BeatTogether.Providers;
 using HarmonyLib;
 using MasterServer;
-using BeatTogether.Providers;
 
 namespace BeatTogether.Patches
 {

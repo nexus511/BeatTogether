@@ -26,6 +26,49 @@ namespace BeatTogether.Providers
 
         public void SetSelectedServer(IServerDetails server)
             => UpdateServerSelectionInt?.Invoke(this, server);
+
+
+        public bool AddTemporaryServer(IServerDetails server, bool select = false)
+        {
+            if (ConfiguredServerIds.Contains(server.Identifier))
+                return false;
+
+            if (Servers.Find(s => s.Identifier == server.Identifier) != null)
+                return false;
+
+            Plugin.Logger.Info("Adding new server (" +
+                $"name='{server.ServerName}', " +
+                $"hostname='{server.HostName}, " +
+                $"port='{server.Port}', " +
+                $"select='{select})"
+            );
+
+            Servers.Append(server);
+            ServerListChanged?.Invoke(this, Servers);
+
+            if (select)
+                SetSelectedServer(server);
+
+            return true;
+        }
+
+        public bool RemoveTemporaryServer(IServerDetails server)
+        {
+            if (ConfiguredServerIds.Contains(server.Identifier))
+                return false;
+
+            Plugin.Logger.Info($"Removing server {server}");
+            if (SelectedServer == server)
+                SetSelectedServer(Servers.First());
+
+            if (Servers.Remove(server))
+            {
+                ServerListChanged?.Invoke(this, Servers);
+                return true;
+            }
+            return false;
+        }
+
         #endregion
 
         #region Internal Methods
