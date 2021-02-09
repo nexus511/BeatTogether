@@ -14,7 +14,7 @@ namespace BeatTogether.Patches
 
             if (firstActivation)
             {
-                var provider = BeatTogetherCore.instance.InstanceProvider;
+                var provider = BeatTogetherCore.instance.InstanceProvider as GameClassInstanceProvider;
                 provider.MultiplayerModeSelectionViewController = __instance;
                 AddServerSelection(__instance);
             }

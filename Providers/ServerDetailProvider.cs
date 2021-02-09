@@ -43,7 +43,7 @@ namespace BeatTogether.Providers
                 $"select='{select})"
             );
 
-            Servers.Append(server);
+            Servers.Add(server);
             ServerListChanged?.Invoke(this, Servers);
 
             if (select)

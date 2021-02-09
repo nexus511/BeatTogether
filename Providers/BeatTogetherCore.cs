@@ -31,7 +31,7 @@ namespace BeatTogether.Providers
         /// Instance of the GameClassInstanceProvider to allow acessing
         /// some of the games internal structures hooked by the mod.
         /// </summary>
-        public GameClassInstanceProvider InstanceProvider { get; private set; }
+        public IGameClassInstanceProvider InstanceProvider { get; private set; }
 
         /// <summary>
         /// Shortcut to ServerDetailsProvider.Selected.

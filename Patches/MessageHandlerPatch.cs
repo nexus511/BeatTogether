@@ -9,7 +9,7 @@ namespace BeatTogether.Patches
     {
         internal static void Prefix(MessageHandler __instance)
         {
-            var provider = BeatTogetherCore.instance.InstanceProvider;
+            var provider = BeatTogetherCore.instance.InstanceProvider as GameClassInstanceProvider;
             if (provider.UserMessageHandler != __instance)
                 return;
 
